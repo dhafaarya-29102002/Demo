@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Quality Control System</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --accent-color: #8BC34A;
+            --dark-color: #1B5E20;
+            --light-color: #C8E6C9;
+            --text-color: #333;
+            --white: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--light-color), var(--primary-color));
+        }
+
+        .login-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            margin-top: 5px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Home Screen Styles */
+        .home-container {
+            display: none;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background-color: #f44336;
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover,
+        .back-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .back-btn {
+            background-color: #f44336;
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: auto;
+        }
+
+        .home-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .home-option {
+            padding: 15px 25px;
+            border-radius: 4px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+        }
+
+        .home-option:hover {
+            transform: translateY(-3px);
+        }
+
+        .home-option.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--secondary-color);
+        }
+
+        .home-content {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            min-height: 400px;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .category-title {
+            color: var(--dark-color);
+            margin: 20px 0 10px;
+            font-size: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Simplified prompt styling */
+        .card-desc {
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        
+        /* Report Action Buttons */
+        .report-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 12px 20px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+
+            .home-option {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <div class="logo">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/050c66b0-8363-4718-95b6-538cf23946aa.png" alt="Food Quality Control System Logo - A stylized illustration of a clipboard with checkmark and food quality badge" />
+            </div>
+            <h1>Quality Control System</h1>
+            <p class="subtitle">Food Production Monitoring & Analysis</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                    <div class="error-message" id="usernameError">Username is required</div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <div class="error-message" id="passwordError">Password is required</div>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Selection Screen -->
+    <div class="container home-container" id="productScreen">
+        <div class="header">
+            <button class="back-btn" id="backBtn">← Back</button>
+            <div class="user-info">
+                <div class="user-avatar" id="productUserAvatar">JD</div>
+            </div>
+        </div>
+
+        <div class="home-content">
+            <h2 class="page-title">Select Product</h2>
+            <div class="grid-container">
+                <div class="card product-card" data-product="1">
+                    <div class="card-icon">1️⃣</div>
+                    <h3 class="card-title">Product 1</h3>
+                    <p class="card-desc">Daily reports for Product 1</p>
+                </div>
+                <div class="card product-card" data-product="2">
+                    <div class="card-icon">2️⃣</div>
+                    <h3 class="card-title">Product 2</h3>
+                    <p class="card-desc">Daily reports for Product 2</p>
+                </div>
+                <div class="card product-card" data-product="3">
+                    <div class="card-icon">3️⃣</div>
+                    <h3 class="card-title">Product 3</h3>
+                    <p class="card-desc">Daily reports for Product 3</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Screen -->
+    <div class="container home-container" id="reportScreen">
+        <div class="header">
+            <button class="back-btn" id="reportBackBtn">← Back</button>
+            <div class="user-info">
+                <div class="user-avatar" id="reportUserAvatar">JD</div>
+            </div>
+        </div>
+
+        <div class="home-content">
+            <h2 class="page-title" id="reportTitle">Report Detail</h2>
+            <div class="report-actions">
+                <button class="action-btn" id="viewReport">View Report</button>
+                <button class="action-btn" id="createReport">Create New</button>
+                <button class="action-btn" id="printReport">Print</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div class="container home-container" id="homeScreen">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div>
+                    <div id="userName">John Doe</div>
+                    <small id="userRole">Quality Control Supervisor</small>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <div class="home-selector">
+            <div class="home-option" data-home="seasoning">Instant Seasoning</div>
+            <div class="home-option" data-home="sauce">Sauce</div>
+            <div class="home-option" data-home="sausage">Sausage</div>
+            <div class="home-option active" data-home="soy">Soy Sauce & Syrup</div>
+            <div class="home-option" data-home="pronto">Pronto</div>
+        </div>
+
+        <div class="home-content">
+            <h2 class="page-title" id="pageTitle">Soy Sauce & Syrup Quality Control</h2>
+            
+            <div class="grid-container">
+                <div class="card" id="dailyReport">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Daily Report</h3>
+                    <p class="card-desc">Submit and view daily production and quality reports by product type</p>
+                </div>
+                <div class="card" id="qcReport">
+                    <div class="card-icon">✅</div>
+                    <h3 class="card-title">QC Report</h3>
+                    <p class="card-desc">Open QC Report spreadsheet (external link)</p>
+                </div>
+                <div class="card" id="trial">
+                    <div class="card-icon">🔬</div>
+                    <h3 class="card-title">Trial</h3>
+                    <p class="card-desc">Open Trial Report spreadsheet (external link)</p>
+                </div>
+                <div class="card" id="internalMemo">
+                    <div class="card-icon">📝</div>
+                    <h3 class="card-title">Internal Memo</h3>
+                    <p class="card-desc">Company announcements and internal communications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginScreen = document.getElementById('loginScreen');
+            const homeScreen = document.getElementById('homeScreen');
+            const loginForm = document.getElementById('loginForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const homeOptions = document.querySelectorAll('.home-option');
+            const pageTitle = document.getElementById('pageTitle');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+
+            // Home content elements
+            const cards = {
+                dailyReport: document.getElementById('dailyReport'),
+                qcReport: document.getElementById('qcReport'),
+                trial: document.getElementById('trial'),
+                internalMemo: document.getElementById('internalMemo')
+            };
+
+            // Product titles
+            const productTitles = {
+                seasoning: 'Instant Seasoning Quality Control',
+                sauce: 'Sauce Quality Control',
+                sausage: 'Sausage Quality Control',
+                soy: 'Soy Sauce & Syrup Quality Control',
+                pronto: 'Pronto Quality Control'
+            };
+
+            // Login form validation
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+
+                // Validate username
+                if (usernameInput.value.trim() === '') {
+                    usernameError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    usernameError.style.display = 'none';
+                }
+
+                // Validate password
+                if (passwordInput.value.trim() === '') {
+                    passwordError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    passwordError.style.display = 'none';
+                }
+
+                if (isValid) {
+                    // Simulate successful login
+                    simulateLogin(usernameInput.value);
+                }
+            });
+
+            // Simulate login process
+            function simulateLogin(username) {
+                // Show loading state (in a real app, you'd have an API call here)
+                setTimeout(() => {
+                    // Set user details
+                    userName.textContent = username;
+                    userAvatar.textContent = username.substring(0, 2).toUpperCase();
+                    
+                    // Switch to home screen
+                    loginScreen.style.display = 'none';
+                    homeScreen.style.display = 'block';
+                }, 500);
+            }
+
+            // Logout functionality
+            logoutBtn.addEventListener('click', function() {
+                // Clear fields
+                usernameInput.value = '';
+                passwordInput.value = '';
+                
+                // Switch back to login screen
+                homeScreen.style.display = 'none';
+                loginScreen.style.display = 'flex';
+            });
+
+            // Home option selection
+            homeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    homeOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update page title based on selection
+                    const homeType = this.getAttribute('data-home');
+                    pageTitle.textContent = productTitles[homeType];
+                });
+            });
+
+            // Card click handlers
+            Object.keys(cards).forEach(cardId => {
+                cards[cardId].addEventListener('click', function() {
+                    if (cardId === 'dailyReport') {
+                        homeScreen.style.display = 'none';
+                        document.getElementById('productScreen').style.display = 'block';
+                    } else if (cardId === 'qcReport') {
+                        window.open('https://docs.google.com/spreadsheets/d/1mmtWrTIbU0QOX50Cp4CDc0gSjxpEjhycScdlK6aT8yg/edit?gid=0#gid=0', '_blank');
+                    } else if (cardId === 'trial') {
+                        window.open('https://docs.google.com/spreadsheets/d/1WKoBsGKEsHcA1jWp7GwowPLoDotEnkQIZOjUm76MIkU/edit?gid=0#gid=0', '_blank');
+                    } else {
+                        homeScreen.style.display = 'none';
+                        const reportScreen = document.getElementById('reportScreen');
+                        reportScreen.style.display = 'block';
+                        document.getElementById('reportTitle').textContent = 
+                            `${cardId.replace(/([A-Z])/g, ' $1')} Options`;
+                    }
+                    // In a real application, you would navigate to the appropriate page
+                    // window.location.href = `${cardId}.html`;
+                });
+            });
+
+            // Setup product selection screen
+            const productScreen = document.getElementById('productScreen');
+            const backBtn = document.getElementById('backBtn');
+            const productCards = document.querySelectorAll('.product-card');
+
+            // Back button handler
+            backBtn.addEventListener('click', function() {
+                productScreen.style.display = 'none';
+                homeScreen.style.display = 'block';
+            });
+
+            // Product card click handlers
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    // Open specific sheet based on product selection
+                    const spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1I8o0juctS-IuVAUgkfGuDrXEyxn3QujQzK9lBBH5IqU/edit#gid=' + 
+                        (product === '1' ? '0' : 
+                         product === '2' ? 'SHEET2_ID' : 
+                         'SHEET3_ID');
+                    window.open(spreadsheetUrl, '_blank');
+                });
+            });
+
+            // Setup report screen
+            const reportScreen = document.getElementById('reportScreen');
+            const reportBackBtn = document.getElementById('reportBackBtn');
+            const viewReportBtn = document.getElementById('viewReport');
+            const createReportBtn = document.getElementById('createReport');
+            const printReportBtn = document.getElementById('printReport');
+
+            // Back button handler for report screen
+            reportBackBtn.addEventListener('click', function() {
+                reportScreen.style.display = 'none';
+                homeScreen.style.display = 'block';
+            });
+
+            // Track selected product
+            let selectedProduct = '1';
+            
+            // Report action buttons handlers
+            viewReportBtn.addEventListener('click', function() {
+                const sheetUrl = 'https://docs.google.com/spreadsheets/d/1I8o0juctS-IuVAUgkfGuDrXEyxn3QujQzK9lBBH5IqU/edit#gid=' +
+                    (selectedProduct === '1' ? '0' : 
+                     selectedProduct === '2' ? 'SHEET2_ID' : 
+                     'SHEET3_ID');
+                window.open(sheetUrl, '_blank');
+            });
+
+            createReportBtn.addEventListener('click', function() {
+                const sheetUrl = 'https://docs.google.com/spreadsheets/d/1I8o0juctS-IuVAUgkfGuDrXEyxn3QujQzK9lBBH5IqU/edit#gid=' +
+                    (selectedProduct === '1' ? '0' : 
+                     selectedProduct === '2' ? 'SHEET2_ID' : 
+                     'SHEET3_ID');
+                window.open(sheetUrl, '_blank');
+            });
+
+            printReportBtn.addEventListener('click', function() {
+                const sheetUrl = 'https://docs.google.com/spreadsheets/d/1I8o0juctS-IuVAUgkfGuDrXEyxn3QujQzK9lBBH5IqU/edit#gid=' +
+                    (selectedProduct === '1' ? '0' : 
+                     selectedProduct === '2' ? 'SHEET2_ID' : 
+                     'SHEET3_ID');
+                window.open(sheetUrl, '_blank');
+            });
+
+            // Update selected product when clicking product cards
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    selectedProduct = this.getAttribute('data-product');
+                    // Rest of your click handler code...
+                });
+            });
+        });
+    </script>
+</body>
+</html>
